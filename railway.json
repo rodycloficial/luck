@@ -3,7 +3,7 @@
     "builder": "NIXPACKS"
   },
   "deploy": {
-    "startCommand": "apache2-foreground",
+    "startCommand": "a2dismod mpm_event && a2enmod mpm_prefork && service apache2 restart && tail -f /dev/null",
     "healthcheckPath": "/api/health",
     "restartPolicyType": "ON_FAILURE"
   }

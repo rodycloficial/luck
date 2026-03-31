@@ -3,7 +3,7 @@
     "builder": "NIXPACKS"
   },
   "deploy": {
-    "startCommand": "a2dismod mpm_event; a2enmod mpm_prefork; /usr/sbin/apache2ctl -D FOREGROUND",
+    "startCommand": "php-fpm -D && nginx -g 'daemon off;'",
     "healthcheckPath": "/api/health",
     "restartPolicyType": "ON_FAILURE"
   }

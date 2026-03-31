@@ -3,7 +3,7 @@
     "builder": "NIXPACKS"
   },
   "deploy": {
-    "startCommand": "php-fpm -D && nginx -g 'daemon off;'",
+    "startCommand": "apache2-foreground",
     "healthcheckPath": "/api/health",
     "restartPolicyType": "ON_FAILURE"
   }

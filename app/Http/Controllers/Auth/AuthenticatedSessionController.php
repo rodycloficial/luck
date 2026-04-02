@@ -7,6 +7,7 @@ use App\Http\Requests\Auth\LoginRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log; // 👈 Agrega esto
 use Illuminate\View\View;
 
 class AuthenticatedSessionController extends Controller
@@ -18,7 +19,15 @@ class AuthenticatedSessionController extends Controller
 
     public function store(LoginRequest $request): RedirectResponse
     {
+        // Log para ver qué está llegando
+        Log::info('Intento de login con:', [
+            'correo' => $request->input('correo'),
+            'contrasena' => $request->input('contrasena') ? '***' : 'vacio'
+        ]);
+
         $request->authenticate();
+
+        Log::info('Autenticación exitosa para: ' . $request->input('correo'));
 
         $request->session()->regenerate();
         

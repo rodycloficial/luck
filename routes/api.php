@@ -111,3 +111,7 @@ Route::prefix('ubicaciones')->group(function () {
     Route::get('/distritos/{idProvincia}', [UbicacionController::class, 'distritos']);
 });
 
+Route::get('/health', function () {
+    return response()->json(['status' => 'ok', 'time' => now()]);
+});
+

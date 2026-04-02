@@ -35,13 +35,23 @@ class AuthenticatedSessionController extends Controller
 
         Log::info('Autenticación exitosa para: ' . $request->input('correo'));
 
+        // Verificar el usuario después de autenticar
+        $user = Auth::user();
+        Log::info('Usuario después de Auth::user():', [
+            'id' => $user->id_usuario ?? 'null',
+            'id_rol' => $user->id_rol ?? 'null',
+            'correo' => $user->correo ?? 'null',
+            'clase' => get_class($user),
+            'llave_primaria' => $user->getAuthIdentifierName()
+        ]);
+
         $request->session()->regenerate();
 
-        // Log para ver el rol del usuario autenticado
-        Log::info('Usuario logueado:', [
-            'id' => Auth::user()->id,
-            'id_rol' => Auth::user()->id_rol,
-            'correo' => Auth::user()->correo
+        // Log para ver el rol del usuario autenticado después de regenerar sesión
+        Log::info('Usuario logueado después de regenerate:', [
+            'id' => Auth::user()->id_usuario ?? 'null',
+            'id_rol' => Auth::user()->id_rol ?? 'null',
+            'correo' => Auth::user()->correo ?? 'null'
         ]);
         
         if ((int) Auth::user()->id_rol === 1) {

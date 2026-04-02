@@ -36,9 +36,13 @@ class AuthenticatedSessionController extends Controller
             'correo' => Auth::user()->correo
         ]);
         
-        // TEMPORAL: Redirigir a home para todos los usuarios
+        if ((int) Auth::user()->id_rol === 1) {
+            Log::info('Redirigiendo a admin.dashboard');
+            return redirect()->intended(route('admin.dashboard'));
+        }
+        
         Log::info('Redirigiendo a home');
-        return redirect('/');
+        return redirect()->intended('/');
     }
 
     public function destroy(Request $request): RedirectResponse

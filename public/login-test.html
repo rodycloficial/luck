@@ -6,8 +6,8 @@
 <body>
     <h2>Login Test</h2>
     <form id="loginForm">
-        <input type="email" id="email" placeholder="Email" required><br><br>
-        <input type="password" id="password" placeholder="Contraseña" required><br><br>
+        <input type="email" id="correo" placeholder="Correo" required><br><br>
+        <input type="password" id="contrasena" placeholder="Contraseña" required><br><br>
         <button type="submit">Iniciar Sesión</button>
     </form>
     <pre id="result"></pre>
@@ -15,8 +15,8 @@
     <script>
         document.getElementById('loginForm').onsubmit = async (e) => {
             e.preventDefault();
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
+            const correo = document.getElementById('correo').value;
+            const contrasena = document.getElementById('contrasena').value;
 
             const response = await fetch('/api/login', {
                 method: 'POST',
@@ -25,7 +25,7 @@
                     'Accept': 'application/json',
                     'X-Requested-With': 'XMLHttpRequest'
                 },
-                body: JSON.stringify({ email, password })
+                body: JSON.stringify({ correo, contrasena })
             });
 
             const result = await response.json();

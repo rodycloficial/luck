@@ -54,11 +54,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
 // ── ADMINISTRADOR
 
-Route::middleware(['auth', 'verified', 'role:1'])
+Route::middleware(['auth', 'verified'])
     ->prefix('admin')
     ->name('admin.')
     ->group(function () {
-
+        
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
         // Productos

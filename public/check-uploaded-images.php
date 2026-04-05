@@ -1,33 +1,39 @@
 <?php
-// Cargar Laravel para tener acceso a las funciones
-require_once __DIR__ . '/../bootstrap/app.php';
-$app = require_once __DIR__ . '/../bootstrap/app.php';
-$kernel = $app->make(Illuminate\Contracts\Http\Kernel::class);
-$kernel->handle(Illuminate\Http\Request::capture());
-
-$storagePath = storage_path('app/public/productos/');
-echo "<h2>Imágenes en storage:</h2>";
+echo "<h2>1. Buscando en storage/app/public/productos/</h2>";
+$storagePath = __DIR__ . '/../storage/app/public/productos/';
 if (is_dir($storagePath)) {
     $files = scandir($storagePath);
     foreach ($files as $file) {
         if ($file != '.' && $file != '..') {
-            echo "- $file<br>";
+            echo "✅ $file<br>";
         }
     }
 } else {
-    echo "La carpeta no existe: $storagePath";
+    echo "❌ Carpeta no existe: " . realpath($storagePath) . "<br>";
 }
 
-echo "<h2>También revisar en public/productos:</h2>";
-$publicPath = $_SERVER['DOCUMENT_ROOT'] . '/productos/';
+echo "<h2>2. Buscando en public/productos/</h2>";
+$publicPath = __DIR__ . '/productos/';
 if (is_dir($publicPath)) {
     $files = scandir($publicPath);
     foreach ($files as $file) {
         if ($file != '.' && $file != '..') {
-            echo "- $file<br>";
+            echo "✅ $file<br>";
         }
     }
 } else {
-    echo "La carpeta no existe: $publicPath";
+    echo "❌ Carpeta no existe: " . realpath($publicPath) . "<br>";
+}
+
+echo "<h2>3. Creando carpeta storage si no existe</h2>";
+if (!is_dir($storagePath)) {
+    mkdir($storagePath, 0777, true);
+    echo "Carpeta storage creada<br>";
+}
+
+echo "<h2>4. Creando carpeta public/productos si no existe</h2>";
+if (!is_dir($publicPath)) {
+    mkdir($publicPath, 0777, true);
+    echo "Carpeta public/productos creada<br>";
 }
 ?>

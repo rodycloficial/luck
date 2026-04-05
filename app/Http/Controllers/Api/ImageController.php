@@ -14,15 +14,24 @@ class ImageController extends Controller
             abort(404);
         }
         
-        $path = public_path('productos/' . $filename);
+        // Buscar en storage primero
+        $storagePath = storage_path('app/public/productos/' . $filename);
         
-        if (!file_exists($path)) {
+        if (file_exists($storagePath)) {
+            return response()->file($storagePath, [
+                'Content-Type' => mime_content_type($storagePath),
+            ]);
+        }
+        
+        // Fallback: buscar en public/productos
+        $publicPath = public_path('productos/' . $filename);
+        
+        if (!file_exists($publicPath)) {
             abort(404, 'Imagen no encontrada');
         }
         
-        // Laravel ya aplica CORS automáticamente por el middleware
-        return response()->file($path, [
-            'Content-Type' => mime_content_type($path),
+        return response()->file($publicPath, [
+            'Content-Type' => mime_content_type($publicPath),
         ]);
     }
 }

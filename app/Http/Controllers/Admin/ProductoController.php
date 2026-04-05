@@ -70,12 +70,22 @@ class ProductoController extends Controller
             'id_categoria'
         ]));
 
-        // Guardar imagen usando storage
+        // Guardar imagen usando move explícito a storage
         if ($request->hasFile('imagen')) {
             $archivo = $request->file('imagen');
             $nombre = uniqid() . '.' . $archivo->getClientOriginalExtension();
-            $archivo->storeAs('public/productos', $nombre);
+            
+            // Ruta explícita a storage
+            $storagePath = storage_path('app/public/productos');
+            if (!is_dir($storagePath)) {
+                mkdir($storagePath, 0777, true);
+            }
+            
+            $archivo->move($storagePath, $nombre);
             $producto->update(['imagen' => $nombre]);
+            
+            // Log para depuración
+            \Log::info('Imagen guardada en storage: ' . $storagePath . '/' . $nombre);
         }
 
         foreach ($request->variantes as $v) {
@@ -146,12 +156,20 @@ class ProductoController extends Controller
 
         $datos = $request->only(['nombre_producto', 'descripcion', 'precio', 'precio_oferta', 'marca', 'estado_producto', 'id_genero', 'id_categoria', 'id_promocion']);
 
-        // Guardar imagen usando storage
+        // Guardar imagen usando move explícito a storage
         if ($request->hasFile('imagen')) {
             $archivo = $request->file('imagen');
             $nombre = uniqid() . '.' . $archivo->getClientOriginalExtension();
-            $archivo->storeAs('public/productos', $nombre);
+            
+            $storagePath = storage_path('app/public/productos');
+            if (!is_dir($storagePath)) {
+                mkdir($storagePath, 0777, true);
+            }
+            
+            $archivo->move($storagePath, $nombre);
             $datos['imagen'] = $nombre;
+            
+            \Log::info('Imagen actualizada en storage: ' . $storagePath . '/' . $nombre);
         }
 
         $galeriaActual = $producto->galeria ?? [];
@@ -169,7 +187,7 @@ class ProductoController extends Controller
         if ($request->hasFile('galeria')) {
             foreach ($request->file('galeria') as $foto) {
                 $nombre = uniqid() . '.' . $foto->getClientOriginalExtension();
-                $foto->storeAs('public/productos', $nombre);
+                $foto->move(storage_path('app/public/productos'), $nombre);
                 $galeriaActual[] = $nombre;
             }
         }
@@ -217,7 +235,7 @@ class ProductoController extends Controller
     private function cargarArchivo($file)
     {
         $nombre = time() . '_' . $file->getClientOriginalName();
-        $file->storeAs('public/productos', $nombre);
+        $file->move(storage_path('app/public/productos'), $nombre);
         return $nombre;
     }
 

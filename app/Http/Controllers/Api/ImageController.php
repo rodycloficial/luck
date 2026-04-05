@@ -14,7 +14,7 @@ class ImageController extends Controller
             abort(404);
         }
         
-        // Buscar en storage primero
+        // Buscar en storage
         $storagePath = storage_path('app/public/productos/' . $filename);
         
         if (file_exists($storagePath)) {
@@ -23,15 +23,6 @@ class ImageController extends Controller
             ]);
         }
         
-        // Fallback: buscar en public/productos
-        $publicPath = public_path('productos/' . $filename);
-        
-        if (!file_exists($publicPath)) {
-            abort(404, 'Imagen no encontrada');
-        }
-        
-        return response()->file($publicPath, [
-            'Content-Type' => mime_content_type($publicPath),
-        ]);
+        abort(404, 'Imagen no encontrada');
     }
 }

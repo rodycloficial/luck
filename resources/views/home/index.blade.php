@@ -206,6 +206,7 @@
                     @endif
                     <img
                         src="{{ url('/api/imagen/' . $item->imagen) }}"
+                          onerror="console.log('Error cargando: {{ url('/api/imagen/' . $item->imagen) }}')"
                         alt="{{ $item->nombre_producto }}"
                         class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                         loading="lazy"
